@@ -201,19 +201,44 @@
       color: var(--gray);
     }
 
-    /* ── VISUAL BLOCK ── */
-    .visual-block {
+    /* ── IMAGE BLOCK ── */
+    .img-block {
       width: 100%;
       aspect-ratio: 16/9;
-      background: var(--dim);
+      overflow: hidden;
       margin-top: 4rem;
       position: relative;
+    }
+
+    .img-block img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.85) contrast(1.05);
+      display: block;
+    }
+
+    /* ── HERO IMAGE ── */
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
       overflow: hidden;
     }
 
-    .visual-block canvas {
+    .hero-image img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.35) contrast(1.1);
+      display: block;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
     }
 
     /* ── CTA ── */
@@ -345,11 +370,16 @@
 
   <!-- Hero -->
   <section class="hero">
-    <p class="hero-eyebrow fade-up">Frontier Research</p>
-    <h1 class="hero-title fade-up">Neuro<br>Shell</h1>
-    <p class="hero-sub fade-up">
-      We are working on something that sits at the edge of what is currently considered possible. We don't talk much about it.
-    </p>
+    <div class="hero-image">
+      <img src="img/hero.png" alt="" />
+    </div>
+    <div class="hero-content">
+      <p class="hero-eyebrow fade-up">Frontier Research</p>
+      <h1 class="hero-title fade-up">Neuro<br>Shell</h1>
+      <p class="hero-sub fade-up">
+        We are working on something that sits at the edge of what is currently considered possible. We don't talk much about it.
+      </p>
+    </div>
   </section>
 
   <!-- Area 01 — BCI -->
@@ -380,6 +410,9 @@
           <span class="stat-value">∞</span>
           <span class="stat-label">Bandwidth ceiling</span>
         </div>
+      </div>
+      <div class="img-block fade-up">
+        <img src="img/interface.png" alt="Neural interface visualization" />
       </div>
     </div>
   </section>
@@ -412,6 +445,9 @@
           <span class="stat-value">~0</span>
           <span class="stat-label">Idle consumption</span>
         </div>
+      </div>
+      <div class="img-block fade-up">
+        <img src="img/architecture.png" alt="Neuromorphic architecture" />
       </div>
     </div>
   </section>
