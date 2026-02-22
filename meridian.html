@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meridian — v9</title>
+<title>Meridian v9 — g comparison</title>
 <style>
   @font-face {
     font-family: 'Meridian';
@@ -12,167 +12,156 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
-    background: #0f0f0f;
+    background: #111;
     color: #f0f0f0;
-    font-family: sans-serif;
-    padding: 60px 40px;
-    max-width: 900px;
+    padding: 48px 48px 80px;
+    max-width: 1000px;
     margin: 0 auto;
+    font-family: system-ui, sans-serif;
   }
 
-  .label {
-    font-size: 11px;
+  .chip {
+    display: inline-block;
+    font-size: 10px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #555;
-    margin-bottom: 12px;
+    border: 1px solid #2a2a2a;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 48px;
   }
 
-  .row {
-    margin-bottom: 60px;
-  }
-
-  /* INTER (no features) */
-  .inter {
-    font-family: 'Meridian', sans-serif;
+  /* The two font styles */
+  .default { 
+    font-family: 'Meridian', sans-serif; 
     font-feature-settings: normal;
-    color: #888;
   }
-
-  /* MERIDIAN with single-story a+g */
-  .meridian {
-    font-family: 'Meridian', sans-serif;
+  .meridian { 
+    font-family: 'Meridian', sans-serif; 
     font-feature-settings: 'cv11' 1;
-    color: #f0f0f0;
   }
 
-  .size-128 { font-size: 128px; line-height: 1.05; letter-spacing: -0.02em; }
-  .size-72  { font-size: 72px;  line-height: 1.1;  letter-spacing: -0.01em; }
-  .size-36  { font-size: 36px;  line-height: 1.3; }
-  .size-18  { font-size: 18px;  line-height: 1.6; }
-  .size-14  { font-size: 14px;  line-height: 1.7; }
+  /* GIANT comparison */
+  .giant { font-size: 240px; line-height: 0.9; letter-spacing: -0.02em; }
 
-  .divider {
-    border: none;
-    border-top: 1px solid #222;
-    margin: 40px 0;
-  }
-
-  .compare {
+  /* Side by side layout */
+  .split {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 60px;
+    gap: 2px;
+    margin-bottom: 64px;
   }
-
-  .compare-label {
+  .side {
+    padding: 32px 36px;
+    background: #1a1a1a;
+    border-radius: 4px;
+  }
+  .side-label {
     font-size: 10px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #444;
-    margin-bottom: 8px;
-  }
-
-  .tag {
-    display: inline-block;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #444;
-    border: 1px solid #222;
-    padding: 2px 8px;
-    border-radius: 3px;
     margin-bottom: 20px;
   }
 
-  .highlight-letters {
-    font-size: 200px;
-    line-height: 1;
-    letter-spacing: -0.02em;
+  .size-96 { font-size: 96px; line-height: 1; letter-spacing: -0.02em; }
+  .size-48 { font-size: 48px; line-height: 1.2; letter-spacing: -0.01em; }
+  .size-24 { font-size: 24px; line-height: 1.4; }
+  .size-16 { font-size: 16px; line-height: 1.6; }
+
+  hr { border: none; border-top: 1px solid #1e1e1e; margin: 56px 0; }
+
+  .label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 14px;
   }
+  .row { margin-bottom: 40px; }
 </style>
 </head>
 <body>
 
-  <div class="tag">Meridian v9</div>
+<div class="chip">Meridian v9 — single-story g</div>
 
-  <!-- Hero display -->
-  <div class="row">
-    <div class="label">Single-story g + a — the defining change</div>
-    <div class="meridian size-128">aging</div>
+<!-- GIANT g comparison -->
+<div class="split">
+  <div class="side">
+    <div class="side-label">Inter (default)</div>
+    <div class="default giant" style="color:#666">g</div>
   </div>
-
-  <!-- Side-by-side comparison: g -->
-  <div class="compare">
-    <div>
-      <div class="compare-label">Before (Inter default)</div>
-      <div class="inter highlight-letters">g</div>
-    </div>
-    <div>
-      <div class="compare-label">After (Meridian cv11)</div>
-      <div class="meridian highlight-letters">g</div>
-    </div>
+  <div class="side">
+    <div class="side-label">Meridian cv11 ↓</div>
+    <div class="meridian giant" style="color:#f0f0f0">g</div>
   </div>
+</div>
 
-  <!-- Side-by-side comparison: a -->
-  <div class="compare">
-    <div>
-      <div class="compare-label">Before (Inter default)</div>
-      <div class="inter highlight-letters">a</div>
-    </div>
-    <div>
-      <div class="compare-label">After (Meridian cv11)</div>
-      <div class="meridian highlight-letters">a</div>
-    </div>
+<!-- a comparison -->
+<div class="split">
+  <div class="side">
+    <div class="side-label">a — Inter (default)</div>
+    <div class="default giant" style="color:#666">a</div>
   </div>
-
-  <hr class="divider">
-
-  <!-- Alphabet -->
-  <div class="row">
-    <div class="label">Full alphabet</div>
-    <div class="meridian size-36">abcdefghijklmnopqrstuvwxyz</div>
-    <br>
-    <div class="meridian size-36">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
-    <br>
-    <div class="meridian size-36">0123456789 .,:;!?@#&</div>
+  <div class="side">
+    <div class="side-label">a — Meridian cv11</div>
+    <div class="meridian giant" style="color:#f0f0f0">a</div>
   </div>
+</div>
 
-  <hr class="divider">
+<hr>
 
-  <!-- Running text -->
-  <div class="row">
-    <div class="label">Running text — 18px</div>
-    <div class="meridian size-18">
-      The quick brown fox jumps over the lazy dog.<br>
-      Good design is as little design as possible.<br>
-      Designing is the process of imagining and planning.
+<!-- ag together -->
+<div class="split">
+  <div class="side">
+    <div class="side-label">ag — Inter</div>
+    <div class="default size-96" style="color:#666">ag</div>
+  </div>
+  <div class="side">
+    <div class="side-label">ag — Meridian</div>
+    <div class="meridian size-96">ag</div>
+  </div>
+</div>
+
+<!-- Words with g -->
+<div class="split">
+  <div class="side">
+    <div class="side-label">Inter</div>
+    <div class="default size-48" style="color:#666; line-height:1.5">
+      signal<br>aging<br>language<br>digital
     </div>
   </div>
-
-  <div class="row">
-    <div class="label">Running text — 14px</div>
-    <div class="meridian size-14">
-      Typography is the art and technique of arranging type to make written
-      language legible, readable and appealing when displayed. The arrangement
-      of type involves selecting typefaces, point sizes, line lengths, and
-      letter-spacing. Meridian is designed to stand alongside Matter and
-      Roobert — clean, rational, with just enough personality.
+  <div class="side">
+    <div class="side-label">Meridian</div>
+    <div class="meridian size-48" style="line-height:1.5">
+      signal<br>aging<br>language<br>digital
     </div>
   </div>
+</div>
 
-  <hr class="divider">
+<hr>
 
-  <!-- g in words -->
-  <div class="row">
-    <div class="label">The 'g' in context — 72px</div>
-    <div class="meridian size-72">signal</div>
-    <div class="meridian size-72">digital</div>
-    <div class="meridian size-72">language</div>
-    <div class="meridian size-72">grid</div>
+<!-- Running text -->
+<div class="split">
+  <div class="side">
+    <div class="side-label">Inter — body text</div>
+    <div class="default size-16" style="color:#666">
+      Good design is as little design as possible.
+      The goal is signal over noise — clarity through
+      geometry, not ornamentation.
+    </div>
   </div>
+  <div class="side">
+    <div class="side-label">Meridian — body text</div>
+    <div class="meridian size-16">
+      Good design is as little design as possible.
+      The goal is signal over noise — clarity through
+      geometry, not ornamentation.
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
