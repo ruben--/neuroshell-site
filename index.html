@@ -3,566 +3,618 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeuroShell</title>
-  <meta name="description" content="Independent research. Bioelectrical interfacing and adaptive computation. Stockholm." />
+  <title>NeuroShell — Independent Research, Stockholm</title>
+  <meta name="description" content="Bioelectrical interfacing and adaptive computation. Stockholm." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Editorial+New:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    /* ─────────────────────────────────────────── RESET */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ─────────────────────────────────────────── TOKENS */
     :root {
-      --bg:      #000000;
-      --bg2:     #050505;
-      --white:   #e8e8e4;
-      --dim:     rgba(232,232,228,0.62);
-      --faint:   rgba(232,232,228,0.1);
-      --line:    rgba(232,232,228,0.12);
-      --green:   #00ff41;
+      --black:   #060606;
+      --off:     #0d0d0b;
+      --white:   #f0efe9;
+      --muted:   rgba(240,239,233,0.65);
+      --line:    rgba(240,239,233,0.1);
+      --accent:  #c8ff00;
+      --r:       0.5rem;
       --ease:    cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
-      background: var(--bg);
+      background: var(--black);
       color: var(--white);
-      font-family: 'IBM Plex Sans', sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       font-weight: 300;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
-      cursor: crosshair;
+      cursor: none;
     }
 
-    /* ── GRID OVERLAY ── */
-    body::before {
-      content: '';
+    /* ─────────────────────────────────────────── CURSOR */
+    #cursor {
       position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(to right, var(--line) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
-      background-size: 80px 80px;
+      top: 0; left: 0;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
       pointer-events: none;
-      z-index: 0;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .25s var(--ease), height .25s var(--ease), opacity .2s;
+      mix-blend-mode: difference;
     }
 
-    * { position: relative; z-index: 1; }
+    #cursor.big {
+      width: 56px;
+      height: 56px;
+      opacity: .7;
+    }
 
-    /* ── NAV ── */
+    /* ─────────────────────────────────────────── NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0;
-      z-index: 200;
-      display: flex; justify-content: space-between; align-items: stretch;
-      border-bottom: 1px solid var(--line);
-      background: rgba(0,0,0,0.92);
-      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 2.2rem 3.5rem;
+      mix-blend-mode: difference;
     }
 
     .nav-logo {
-      padding: 1.1rem 2rem;
-      font-family: 'IBM Plex Mono', monospace;
+      font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
       font-weight: 500;
-      letter-spacing: 0.06em;
-      border-right: 1px solid var(--line);
-      display: flex; align-items: center;
-    }
-
-    .nav-logo span { color: var(--green); margin-right: 0.5em; }
-
-    .nav-links {
-      display: flex; align-items: stretch;
-    }
-
-    .nav-link {
-      padding: 1.1rem 1.8rem;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--dim);
+    }
+
+    .nav-right {
+      display: flex; gap: 3rem; align-items: center;
+    }
+
+    .nav-item {
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
       text-decoration: none;
-      border-left: 1px solid var(--line);
-      display: flex; align-items: center;
-      transition: color .2s, background .2s;
+      transition: color .2s;
     }
 
-    .nav-link:hover { color: var(--white); background: rgba(232,232,228,0.03); }
+    .nav-item:hover { color: var(--white); }
 
-    .nav-status {
-      padding: 1.1rem 2rem;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--dim);
-      border-left: 1px solid var(--line);
-      display: flex; align-items: center; gap: 0.6rem;
-    }
-
-    .status-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--green);
-      animation: blink 2.5s ease-in-out infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
-
-    /* ── HERO ── */
+    /* ─────────────────────────────────────────── HERO */
     .hero {
+      position: relative;
       min-height: 100svh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: 0 3.5rem 4rem;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      filter: brightness(0.22) contrast(1.15) saturate(0.6);
+      transform-origin: center center;
+    }
+
+    .hero-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 40%,
+        rgba(6,6,6,0.6) 70%,
+        var(--black) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 0 2rem 0;
-      border-bottom: 1px solid var(--line);
     }
 
-    .hero-top {
-      padding-top: 8rem;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .hero-meta {
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2.5rem;
       display: flex;
-      gap: 3rem;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-headline {
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-size: clamp(5.5rem, 14vw, 16rem);
+      font-weight: 400;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      color: var(--white);
       margin-bottom: 4rem;
     }
 
-    .meta-item {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      color: var(--dim);
+    .hero-headline em {
+      font-style: italic;
+      color: var(--muted);
     }
-
-    .meta-item strong {
-      display: block;
-      color: var(--green);
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-
-    .hero-title {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: clamp(3.5rem, 10vw, 11rem);
-      font-weight: 300;
-      line-height: 1;
-      letter-spacing: -0.02em;
-      color: var(--white);
-    }
-
-    .hero-title .dim { color: var(--dim); }
 
     .hero-bottom {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      border-top: 1px solid var(--line);
-    }
-
-    .hero-cell {
-      padding: 2.5rem 2rem;
-      border-right: 1px solid var(--line);
-    }
-
-    .hero-cell:last-child { border-right: none; }
-
-    .cell-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--green);
-      margin-bottom: 1rem;
-    }
-
-    .cell-body {
-      font-size: 0.88rem;
-      line-height: 1.75;
-      color: var(--dim);
-      font-weight: 300;
-    }
-
-    /* ── DIVIDER ROW ── */
-    .row-label {
+      position: relative;
+      z-index: 2;
       display: flex;
-      align-items: center;
-      gap: 2rem;
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid var(--line);
+      justify-content: space-between;
+      align-items: flex-end;
       border-top: 1px solid var(--line);
-      background: var(--bg2);
+      padding-top: 2rem;
     }
 
-    .row-index {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.58rem;
-      color: var(--green);
-      letter-spacing: 0.15em;
+    .hero-desc {
+      max-width: 420px;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--muted);
+      font-weight: 300;
     }
 
-    .row-title {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--dim);
-    }
-
-    .row-line {
-      flex: 1;
-      height: 1px;
-      background: var(--line);
-    }
-
-    /* ── TWO-COL ── */
-    .two-col {
-      display: grid;
-      grid-template-columns: 2fr 3fr;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .col-left {
-      padding: 5rem 2rem;
-      border-right: 1px solid var(--line);
-    }
-
-    .col-right {
-      padding: 5rem 3rem;
-    }
-
-    .section-num {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      color: var(--green);
+    .hero-scroll {
+      font-size: 0.65rem;
       letter-spacing: 0.2em;
-      margin-bottom: 2.5rem;
-    }
-
-    .section-title {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: clamp(1.8rem, 3vw, 3.2rem);
-      font-weight: 300;
-      line-height: 1.15;
-      letter-spacing: -0.01em;
-      color: var(--white);
-    }
-
-    .section-title em {
-      color: var(--dim);
-      font-style: italic;
-      display: block;
-    }
-
-    .body-text {
-      font-size: 0.92rem;
-      line-height: 1.9;
-      color: var(--dim);
-      font-weight: 300;
-      max-width: 60ch;
-    }
-
-    .body-text p + p { margin-top: 1.6rem; }
-
-    .body-text strong { color: var(--white); font-weight: 400; }
-
-    .mono-block {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--green);
-      line-height: 1.8;
-      border: 1px solid var(--line);
-      padding: 1.5rem;
-      margin-top: 2.5rem;
-      background: rgba(0,255,65,0.02);
-    }
-
-    /* ── DATA TABLE ── */
-    .data-table {
-      border-bottom: 1px solid var(--line);
-    }
-
-    .data-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      border-bottom: 1px solid var(--line);
-      padding: 0 2rem;
-    }
-
-    .data-row:last-child { border-bottom: none; }
-
-    .data-row.header {
-      background: var(--bg2);
-    }
-
-    .data-cell {
-      padding: 1.4rem 0;
-      border-right: 1px solid var(--line);
-      padding-right: 2rem;
-      margin-right: 0;
-    }
-
-    .data-cell:last-child { border-right: none; }
-
-    .data-cell.header-cell {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--green);
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
     }
 
-    .data-cell.val {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.78rem;
-      color: var(--white);
+    .hero-scroll::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 3rem;
+      background: var(--line);
+      animation: scrollLine 2s ease-in-out infinite;
     }
 
-    .data-cell.label {
-      font-size: 0.82rem;
-      color: var(--dim);
+    @keyframes scrollLine {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.3); }
     }
 
-    /* ── STATEMENT ── */
-    .statement {
-      padding: 8rem 2rem;
+    /* ─────────────────────────────────────────── TICKER */
+    .ticker-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: 200px 1fr;
+      padding: 1.1rem 0;
+      background: var(--off);
+    }
+
+    .ticker {
+      display: flex;
       gap: 6rem;
+      animation: ticker 28s linear infinite;
+      white-space: nowrap;
+    }
+
+    .ticker-item {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .ticker-item span {
+      color: var(--accent);
+      margin-right: 1rem;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─────────────────────────────────────────── SECTION INTRO */
+    .section-intro {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      padding: 10rem 3.5rem 8rem;
+      border-top: 1px solid var(--line);
+      align-items: end;
+    }
+
+    .section-number {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--accent);
+      text-transform: uppercase;
+      padding-top: 0.6rem;
+    }
+
+    .section-heading {
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-size: clamp(2.8rem, 5.5vw, 6.5rem);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────── BODY TEXT */
+    .body-block {
+      padding: 0 3.5rem 10rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
       align-items: start;
     }
 
-    .stmt-aside {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--dim);
-      padding-top: 0.3rem;
-      line-height: 1.8;
-    }
-
-    .stmt-text {
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: clamp(1.4rem, 2.8vw, 3rem);
+    .body-text {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--muted);
       font-weight: 300;
-      line-height: 1.45;
+    }
+
+    .body-text p + p { margin-top: 1.5rem; }
+
+    .body-text strong {
       color: var(--white);
-      letter-spacing: -0.01em;
+      font-weight: 400;
     }
 
-    .stmt-text em {
+    .body-aside {
+      padding-top: 0.5rem;
+    }
+
+    .pull-quote {
+      font-family: 'Times New Roman', serif;
       font-style: italic;
-      color: var(--dim);
+      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+      line-height: 1.4;
+      color: var(--white);
+      border-left: 1px solid var(--accent);
+      padding-left: 2.5rem;
+      margin-bottom: 3rem;
     }
 
-    /* ── CTA ── */
-    .cta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .img-frame {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .img-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75) contrast(1.1) saturate(0.7);
+      display: block;
+      transition: transform 8s var(--ease);
+    }
+
+    .img-frame:hover img {
+      transform: scale(1.04);
+    }
+
+    .img-caption {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 1.2rem;
+    }
+
+    /* ─────────────────────────────────────────── STAT STRIP */
+    .stats-strip {
+      border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
     }
 
-    .cta-left {
-      padding: 6rem 2rem;
+    .stat {
+      padding: 4rem 3.5rem;
       border-right: 1px solid var(--line);
     }
 
-    .cta-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
+    .stat:last-child { border-right: none; }
+
+    .stat-value {
+      font-family: 'Times New Roman', serif;
+      font-size: clamp(2.5rem, 4vw, 4.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 0.8rem;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--green);
-      margin-bottom: 2rem;
+      color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────── MANIFESTO */
+    .manifesto {
+      padding: 12rem 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      border-top: 1px solid var(--line);
+    }
+
+    .manifesto-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4rem;
+    }
+
+    .manifesto-text {
+      font-family: 'Times New Roman', serif;
+      font-size: clamp(1.8rem, 3.5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.35;
+      max-width: 900px;
+      color: var(--white);
+    }
+
+    .manifesto-text em {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────── CTA */
+    .cta-section {
+      border-top: 1px solid var(--line);
+      padding: 10rem 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+    }
+
+    .cta-left {}
+
+    .cta-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
     }
 
     .cta-heading {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: clamp(1.5rem, 2.5vw, 2.5rem);
-      font-weight: 300;
-      line-height: 1.3;
-      letter-spacing: -0.01em;
+      font-family: 'Times New Roman', serif;
+      font-size: clamp(2.2rem, 4vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
     }
 
-    .cta-right {
-      padding: 6rem 3rem;
+    .cta-form {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 2rem;
+      gap: 1rem;
     }
 
-    .input-row {
+    .form-row {
       display: flex;
-      border: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
 
-    .input-row input {
+    .form-row input {
       flex: 1;
       background: transparent;
       border: none;
       outline: none;
-      padding: 1rem 1.2rem;
+      padding: 1.2rem 0;
       color: var(--white);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
       font-weight: 300;
     }
 
-    .input-row input::placeholder { color: var(--dim); }
+    .form-row input::placeholder { color: var(--muted); }
 
-    .input-row input:focus { background: rgba(232,232,228,0.02); }
-
-    .submit-btn {
+    .form-btn {
       background: transparent;
       border: none;
-      border-left: 1px solid var(--line);
-      padding: 1rem 1.5rem;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      font-weight: 400;
+      color: var(--accent);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--green);
-      cursor: crosshair;
-      transition: background .2s;
+      cursor: pointer;
+      transition: letter-spacing .3s var(--ease);
+      padding-left: 1.5rem;
     }
 
-    .submit-btn:hover { background: rgba(0,255,65,0.05); }
+    .form-btn:hover { letter-spacing: 0.3em; }
 
-    .cta-note {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--dim);
-      line-height: 1.7;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      border-top: 1px solid var(--line);
-    }
-
-    .footer-cell {
-      padding: 2rem;
-      border-right: 1px solid var(--line);
-    }
-
-    .footer-cell:last-child { border-right: none; }
-
-    .footer-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--green);
-      margin-bottom: 0.6rem;
-    }
-
-    .footer-value {
-      font-family: 'IBM Plex Mono', monospace;
+    .form-note {
       font-size: 0.7rem;
-      color: var(--dim);
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      line-height: 1.6;
     }
 
-    /* ── REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
-    .reveal.in { opacity: 1; transform: none; }
-    .d1 { transition-delay: .1s; }
-    .d2 { transition-delay: .2s; }
-    .d3 { transition-delay: .3s; }
+    /* ─────────────────────────────────────────── FOOTER */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 3rem 3.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-    /* ── MOBILE ── */
-    @media (max-width: 768px) {
-      .nav-links, .nav-status { display: none; }
-      .nav-logo { padding: 1rem 1.2rem; }
-      .hero { padding: 0 1.2rem 0; }
-      .hero-meta { flex-wrap: wrap; gap: 1.5rem; }
-      .hero-bottom { grid-template-columns: 1fr; }
-      .hero-cell { border-right: none; border-bottom: 1px solid var(--line); }
-      .hero-cell:last-child { border-bottom: none; }
-      .two-col { grid-template-columns: 1fr; }
-      .col-left { border-right: none; border-bottom: 1px solid var(--line); }
-      .data-row { grid-template-columns: 1fr 1fr; }
-      .statement { grid-template-columns: 1fr; gap: 2rem; padding: 5rem 1.2rem; }
-      .cta { grid-template-columns: 1fr; }
-      .cta-left { border-right: none; border-bottom: 1px solid var(--line); padding: 4rem 1.2rem; }
-      .cta-right { padding: 4rem 1.2rem; }
-      footer { grid-template-columns: 1fr; }
-      .footer-cell { border-right: none; border-bottom: 1px solid var(--line); }
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-name {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .footer-sub {
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-right {
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: right;
+    }
+
+    /* ─────────────────────────────────────────── CANVAS */
+    #neural-canvas {
+      position: fixed; inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.08;
+    }
+
+    /* ─────────────────────────────────────────── REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s var(--ease), transform 1s var(--ease);
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay-1 { transition-delay: .12s; }
+    .reveal-delay-2 { transition-delay: .24s; }
+    .reveal-delay-3 { transition-delay: .36s; }
+
+    /* ─────────────────────────────────────────── MOBILE */
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem 1.8rem; }
+      .nav-right { display: none; }
+      .hero { padding: 0 1.8rem 3.5rem; }
+      .hero-headline { font-size: clamp(4rem, 17vw, 8rem); }
+      .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+      .hero-scroll { display: none; }
+      .section-intro { grid-template-columns: 1fr; gap: 2rem; padding: 6rem 1.8rem 4rem; }
+      .body-block { grid-template-columns: 1fr; gap: 4rem; padding: 0 1.8rem 6rem; }
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .stat { border-bottom: 1px solid var(--line); }
+      .manifesto { padding: 7rem 1.8rem; }
+      .cta-section { grid-template-columns: 1fr; gap: 4rem; padding: 7rem 1.8rem; }
+      footer { padding: 2rem 1.8rem; }
     }
   </style>
 </head>
 <body>
 
+<div id="cursor"></div>
+<canvas id="neural-canvas"></canvas>
+
 <!-- NAV -->
 <nav>
-  <div class="nav-logo"><span>//</span> NeuroShell</div>
-  <div class="nav-links">
-    <a href="#research" class="nav-link">Research</a>
-    <a href="#data" class="nav-link">Data</a>
-    <a href="#contact" class="nav-link">Contact</a>
-  </div>
-  <div class="nav-status">
-    <div class="status-dot"></div>
-    <span>Active — Stockholm</span>
+  <div class="nav-logo">NeuroShell</div>
+  <div class="nav-right">
+    <a href="#research" class="nav-item">Research</a>
+    <a href="#contact" class="nav-item">Contact</a>
+    <span class="nav-item" style="color:rgba(240,239,233,0.2)">Est. 2026</span>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-top">
-    <div class="hero-meta">
-      <div class="meta-item"><strong>Entity</strong>NeuroShell AB</div>
-      <div class="meta-item"><strong>Founded</strong>2026</div>
-      <div class="meta-item"><strong>Location</strong>Stockholm, Sweden</div>
-      <div class="meta-item"><strong>Status</strong>Pre-publication</div>
-    </div>
-    <h1 class="hero-title reveal">
-      NEURO<br><span class="dim">SHELL</span>
+  <div class="hero-bg">
+    <img src="img/hero.png" alt="" id="hero-img" />
+    <div class="hero-gradient"></div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow reveal">Independent Research Laboratory</p>
+    <h1 class="hero-headline reveal reveal-delay-1">
+      Neuro<br><em>Shell</em>
     </h1>
   </div>
-  <div class="hero-bottom">
-    <div class="hero-cell reveal">
-      <div class="cell-label">Domain</div>
-      <div class="cell-body">Bioelectrical Interfacing. The conditions under which bidirectional communication across the biological-synthetic boundary becomes tractable.</div>
-    </div>
-    <div class="hero-cell reveal d1">
-      <div class="cell-label">Method</div>
-      <div class="cell-body">Substrate-native computation. Investigating spiking, event-driven, and locally adaptive paradigms instantiated in physical hardware.</div>
-    </div>
-    <div class="hero-cell reveal d2">
-      <div class="cell-label">Position</div>
-      <div class="cell-body">We are not yet in a position to discuss specifics. Correspondence is welcome. Publication timeline is not established.</div>
-    </div>
+  <div class="hero-bottom reveal reveal-delay-2">
+    <p class="hero-desc">
+      Our work occupies a narrow intersection of disciplines that has, until recently, remained largely theoretical. We are not yet in a position to discuss specifics.
+    </p>
+    <div class="hero-scroll">Scroll</div>
   </div>
 </section>
 
-<!-- RESEARCH -->
-<div class="row-label" id="research">
-  <span class="row-index">01</span>
-  <div class="row-line"></div>
-  <span class="row-title">Bioelectrical Interfacing</span>
-  <div class="row-line"></div>
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><span>—</span> Bioelectrical Interfacing</span>
+    <span class="ticker-item"><span>—</span> Adaptive Computation</span>
+    <span class="ticker-item"><span>—</span> Neural Transduction</span>
+    <span class="ticker-item"><span>—</span> Substrate-Native Processing</span>
+    <span class="ticker-item"><span>—</span> Independent Research</span>
+    <span class="ticker-item"><span>—</span> Stockholm, Sweden</span>
+    <span class="ticker-item"><span>—</span> Bioelectrical Interfacing</span>
+    <span class="ticker-item"><span>—</span> Adaptive Computation</span>
+    <span class="ticker-item"><span>—</span> Neural Transduction</span>
+    <span class="ticker-item"><span>—</span> Substrate-Native Processing</span>
+    <span class="ticker-item"><span>—</span> Independent Research</span>
+    <span class="ticker-item"><span>—</span> Stockholm, Sweden</span>
+  </div>
 </div>
 
-<div class="two-col">
-  <div class="col-left">
-    <div class="section-num reveal">SECTION 01.A</div>
-    <h2 class="section-title reveal d1">
-      Neural<br><em>Transduction</em>
-    </h2>
+<!-- SECTION 01 -->
+<div id="research">
+  <div class="section-intro">
+    <div class="section-number reveal">01</div>
+    <h2 class="section-heading reveal reveal-delay-1">On neural<br><em>transduction</em></h2>
   </div>
-  <div class="col-right">
+
+  <div class="body-block">
     <div class="body-text reveal">
       <p>
         The electrochemical signalling of biological neural tissue constitutes a form of information processing that remains, in many respects, poorly understood. What is increasingly apparent, however, is that this process is not fundamentally incompatible with engineered systems.
@@ -574,164 +626,198 @@
         The implications of such a capability, if realised at the requisite fidelity and scale, are difficult to overstate.
       </p>
     </div>
-    <div class="mono-block reveal d1">
-      &gt; Signal class: electrochemical / bioelectrical<br>
-      &gt; Interface type: bidirectional, high-fidelity<br>
-      &gt; Constraint: metabolic, spatial, temporal<br>
-      &gt; Status: research active
+    <div class="body-aside">
+      <blockquote class="pull-quote reveal reveal-delay-1">
+        "The question is not whether the boundary can be crossed, but whether we can be precise about where it is."
+      </blockquote>
+      <div class="img-frame reveal reveal-delay-2">
+        <img src="img/interface.png" alt="Neural interface" />
+      </div>
+      <p class="img-caption">Fig. 1 — Signal propagation study, 2026</p>
     </div>
   </div>
 </div>
 
-<div class="row-label">
-  <span class="row-index">02</span>
-  <div class="row-line"></div>
-  <span class="row-title">Adaptive Computation</span>
-  <div class="row-line"></div>
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat reveal">
+    <div class="stat-value">~10<sup style="font-size:0.5em">11</sup></div>
+    <div class="stat-label">Neurons in the human cortex</div>
+  </div>
+  <div class="stat reveal reveal-delay-1">
+    <div class="stat-value">1 ms</div>
+    <div class="stat-label">Synaptic transmission latency</div>
+  </div>
+  <div class="stat reveal reveal-delay-2">
+    <div class="stat-value">20 W</div>
+    <div class="stat-label">Full-brain power consumption</div>
+  </div>
+  <div class="stat reveal reveal-delay-3">
+    <div class="stat-value">∞</div>
+    <div class="stat-label">Degrees of theoretical complexity</div>
+  </div>
 </div>
 
-<div class="two-col">
-  <div class="col-left">
-    <div class="section-num reveal">SECTION 02.A</div>
-    <h2 class="section-title reveal d1">
-      Substrate-native<br><em>Processing</em>
-    </h2>
+<!-- SECTION 02 -->
+<div>
+  <div class="section-intro">
+    <div class="section-number reveal">02</div>
+    <h2 class="section-heading reveal reveal-delay-1">Substrate-native<br><em>processing</em></h2>
   </div>
-  <div class="col-right">
-    <div class="body-text reveal">
+
+  <div class="body-block">
+    <div class="body-aside">
+      <div class="img-frame reveal">
+        <img src="img/architecture.png" alt="Neuromorphic architecture" />
+      </div>
+      <p class="img-caption">Fig. 2 — Computational substrate model</p>
+    </div>
+    <div class="body-text reveal reveal-delay-1">
       <p>
         Von Neumann architectures, despite their dominance, impose a set of structural constraints that grow increasingly difficult to reconcile with the computational demands of temporally dynamic, high-dimensional problems.
       </p>
       <p>
-        The brain, which operates under severe metabolic constraints, has arrived at a fundamentally different set of trade-offs. Our work investigates <strong>spiking, event-driven, and locally adaptive computational paradigms</strong> that can be instantiated in physical hardware.
+        The brain, which operates under severe metabolic constraints, has arrived at a fundamentally different set of trade-offs. Our work investigates the degree to which <strong>spiking, event-driven, and locally adaptive computational paradigms</strong> can be instantiated in physical hardware.
       </p>
       <p>
         This is not, at its core, a question of efficiency. It is a question of what computation is capable of becoming.
       </p>
     </div>
-    <div class="mono-block reveal d1">
-      &gt; Paradigm: spiking / neuromorphic / event-driven<br>
-      &gt; Comparison point: von Neumann baseline<br>
-      &gt; Target metric: tractability, not throughput<br>
-      &gt; Status: theoretical framework active
-    </div>
   </div>
 </div>
 
-<!-- DATA TABLE -->
-<div class="row-label" id="data">
-  <span class="row-index">03</span>
-  <div class="row-line"></div>
-  <span class="row-title">Reference Parameters</span>
-  <div class="row-line"></div>
-</div>
-
-<div class="data-table">
-  <div class="data-row header">
-    <div class="data-cell header-cell">Parameter</div>
-    <div class="data-cell header-cell">Value</div>
-    <div class="data-cell header-cell">Unit</div>
-    <div class="data-cell header-cell">Significance</div>
-  </div>
-  <div class="data-row reveal">
-    <div class="data-cell label">Cortical neurons</div>
-    <div class="data-cell val">~1.0 × 10¹¹</div>
-    <div class="data-cell val">count</div>
-    <div class="data-cell val">Baseline complexity</div>
-  </div>
-  <div class="data-row reveal">
-    <div class="data-cell label">Synaptic transmission latency</div>
-    <div class="data-cell val">0.5–1.0</div>
-    <div class="data-cell val">ms</div>
-    <div class="data-cell val">Temporal resolution target</div>
-  </div>
-  <div class="data-row reveal">
-    <div class="data-cell label">Full-brain power draw</div>
-    <div class="data-cell val">~20</div>
-    <div class="data-cell val">W</div>
-    <div class="data-cell val">Metabolic constraint</div>
-  </div>
-  <div class="data-row reveal">
-    <div class="data-cell label">Von Neumann memory bandwidth</div>
-    <div class="data-cell val">10²–10³</div>
-    <div class="data-cell val">GB/s</div>
-    <div class="data-cell val">Architecture bottleneck</div>
-  </div>
-  <div class="data-row reveal">
-    <div class="data-cell label">Spiking network energy per operation</div>
-    <div class="data-cell val">~10⁻¹²</div>
-    <div class="data-cell val">J/op</div>
-    <div class="data-cell val">Target efficiency regime</div>
-  </div>
-</div>
-
-<!-- STATEMENT -->
-<div class="statement">
-  <div class="stmt-aside reveal">
-    POSITION<br>STATEMENT<br>2026
-  </div>
-  <div class="stmt-text reveal d1">
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <p class="manifesto-eyebrow reveal">Position</p>
+  <p class="manifesto-text reveal reveal-delay-1">
     We believe the next consequential threshold in computation will not be reached by scaling existing paradigms. It will require <em>a different theory of what a substrate can do.</em>
-  </div>
+  </p>
 </div>
 
 <!-- CTA -->
-<div class="cta" id="contact">
+<div class="cta-section" id="contact">
   <div class="cta-left">
-    <div class="cta-label reveal">Correspondence</div>
-    <h2 class="cta-heading reveal d1">
+    <p class="cta-eyebrow reveal">Correspondence</p>
+    <h2 class="cta-heading reveal reveal-delay-1">
       We publish<br>infrequently.<br>Write to us.
     </h2>
   </div>
-  <div class="cta-right">
-    <div class="input-row reveal">
-      <input type="email" placeholder="your@address.com" id="email-input" />
-      <button class="submit-btn" onclick="handleSubmit()">Send →</button>
+  <div class="cta-form reveal reveal-delay-2">
+    <div class="form-row">
+      <input type="email" placeholder="your@email.com" id="email-input" />
+      <button class="form-btn" onclick="handleSubmit()">Submit →</button>
     </div>
-    <p class="cta-note reveal d1">
-      Contact will be initiated when something worth communicating has been completed.<br>
-      No frequency is implied or intended.
+    <p class="form-note">
+      We will contact you when something worth sharing has been completed. No frequency guarantee is implied or intended.
     </p>
   </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-cell">
-    <div class="footer-label">Entity</div>
-    <div class="footer-value">NeuroShell AB<br>© 2026 — All rights reserved</div>
+  <div class="footer-left">
+    <div class="footer-name">NeuroShell</div>
+    <div class="footer-sub">© 2026 NeuroShell AB — All rights reserved</div>
   </div>
-  <div class="footer-cell">
-    <div class="footer-label">Location</div>
-    <div class="footer-value">Stockholm, Sweden<br>Europe / UTC+1</div>
-  </div>
-  <div class="footer-cell">
-    <div class="footer-label">Correspondence</div>
-    <div class="footer-value">Via the form above</div>
+  <div class="footer-right">
+    Stockholm, Sweden
   </div>
 </footer>
 
 <script>
-/* Reveal */
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
-}, { threshold: 0.06 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+/* ── Cursor ── */
+const cur = document.getElementById('cursor');
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+});
+document.querySelectorAll('a, button, .img-frame').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('big'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+});
 
+/* ── Neural canvas ── */
+const cv = document.getElementById('neural-canvas');
+const cx = cv.getContext('2d');
+let nodes = [];
+const N = 55, MAX = 150;
+
+function resize() {
+  cv.width  = innerWidth;
+  cv.height = innerHeight;
+}
+function init() {
+  nodes = Array.from({length:N}, () => ({
+    x: Math.random() * cv.width,
+    y: Math.random() * cv.height,
+    vx: (Math.random()-.5)*.35,
+    vy: (Math.random()-.5)*.35,
+    r: Math.random()*1.2+.4
+  }));
+}
+function frame() {
+  cx.clearRect(0,0,cv.width,cv.height);
+  nodes.forEach(n => {
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < 0 || n.x > cv.width) n.vx *= -1;
+    if (n.y < 0 || n.y > cv.height) n.vy *= -1;
+  });
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i+1; j < nodes.length; j++) {
+      const dx = nodes[i].x-nodes[j].x, dy = nodes[i].y-nodes[j].y;
+      const d = Math.sqrt(dx*dx+dy*dy);
+      if (d < MAX) {
+        cx.beginPath();
+        cx.moveTo(nodes[i].x,nodes[i].y);
+        cx.lineTo(nodes[j].x,nodes[j].y);
+        cx.strokeStyle = `rgba(200,255,0,${(1-d/MAX)*.5})`;
+        cx.lineWidth = .5;
+        cx.stroke();
+      }
+    }
+  }
+  nodes.forEach(n => {
+    cx.beginPath();
+    cx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    cx.fillStyle = 'rgba(200,255,0,0.8)';
+    cx.fill();
+  });
+  requestAnimationFrame(frame);
+}
+resize(); init(); frame();
+window.addEventListener('resize', () => { resize(); init(); });
+
+/* ── Hero parallax ── */
+const heroImg = document.getElementById('hero-img');
+window.addEventListener('scroll', () => {
+  const y = scrollY;
+  if (heroImg) heroImg.style.transform = `translateY(${y * 0.25}px)`;
+});
+
+/* ── Reveal on scroll ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Hero immediate
 setTimeout(() => {
   document.querySelectorAll('.hero .reveal').forEach((el,i) => {
-    setTimeout(() => el.classList.add('in'), i*160);
+    setTimeout(() => el.classList.add('in'), i * 180);
   });
-}, 60);
+}, 80);
 
-/* Form */
+/* ── Form ── */
 function handleSubmit() {
   const inp = document.getElementById('email-input');
-  const btn = document.querySelector('.submit-btn');
+  const btn = document.querySelector('.form-btn');
   if (!inp.value.includes('@')) return;
-  btn.textContent = 'Received';
+  btn.textContent = 'Noted —';
+  btn.style.color = '#c8ff00';
   inp.value = '';
-  setTimeout(() => { btn.textContent = 'Send →'; }, 4000);
+  setTimeout(() => { btn.textContent = 'Submit →'; btn.style.color = ''; }, 4000);
 }
 </script>
 </body>
