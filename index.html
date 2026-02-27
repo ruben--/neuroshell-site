@@ -8,19 +8,19 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Editorial+New:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     /* ─────────────────────────────────────────── RESET */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     /* ─────────────────────────────────────────── TOKENS */
     :root {
-      --black:   #060606;
-      --off:     #0d0d0b;
+      --black:   #080705;
+      --off:     #0f0e0b;
       --white:   #f0efe9;
       --muted:   rgba(240,239,233,0.65);
       --line:    rgba(240,239,233,0.1);
-      --accent:  #c8ff00;
+      --accent:  #C9A96E;
       --r:       0.5rem;
       --ease:    cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -30,7 +30,7 @@
     body {
       background: var(--black);
       color: var(--white);
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
       font-weight: 300;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
@@ -67,7 +67,7 @@
     }
 
     .nav-logo {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.78rem;
       font-weight: 500;
       letter-spacing: 0.2em;
@@ -152,11 +152,11 @@
     }
 
     .hero-headline {
-      font-family: 'Times New Roman', 'Georgia', serif;
-      font-size: clamp(5.5rem, 14vw, 16rem);
-      font-weight: 400;
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      font-size: clamp(6rem, 15vw, 18rem);
+      font-weight: 300;
       line-height: 0.88;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.01em;
       color: var(--white);
       margin-bottom: 4rem;
     }
@@ -262,11 +262,11 @@
     }
 
     .section-heading {
-      font-family: 'Times New Roman', 'Georgia', serif;
-      font-size: clamp(2.8rem, 5.5vw, 6.5rem);
-      font-weight: 400;
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      font-size: clamp(3.2rem, 6vw, 7.5rem);
+      font-weight: 300;
       line-height: 1.02;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
     }
 
     .section-heading em {
@@ -285,9 +285,9 @@
 
     .body-text {
       font-size: 1rem;
-      line-height: 1.85;
+      line-height: 1.9;
       color: var(--muted);
-      font-weight: 300;
+      font-weight: 400;
     }
 
     .body-text p + p { margin-top: 1.5rem; }
@@ -302,9 +302,9 @@
     }
 
     .pull-quote {
-      font-family: 'Times New Roman', serif;
+      font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+      font-size: clamp(1.6rem, 2.8vw, 2.6rem);
       line-height: 1.4;
       color: var(--white);
       border-left: 1px solid var(--accent);
@@ -355,10 +355,10 @@
     .stat:last-child { border-right: none; }
 
     .stat-value {
-      font-family: 'Times New Roman', serif;
-      font-size: clamp(2.5rem, 4vw, 4.5rem);
-      font-weight: 400;
-      letter-spacing: -0.02em;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 4.5vw, 5.2rem);
+      font-weight: 300;
+      letter-spacing: -0.01em;
       color: var(--white);
       margin-bottom: 0.8rem;
       line-height: 1;
@@ -390,9 +390,9 @@
     }
 
     .manifesto-text {
-      font-family: 'Times New Roman', serif;
-      font-size: clamp(1.8rem, 3.5vw, 4rem);
-      font-weight: 400;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 4.8rem);
+      font-weight: 300;
       line-height: 1.35;
       max-width: 900px;
       color: var(--white);
@@ -424,11 +424,11 @@
     }
 
     .cta-heading {
-      font-family: 'Times New Roman', serif;
-      font-size: clamp(2.2rem, 4vw, 4.5rem);
-      font-weight: 400;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4.5vw, 5.5rem);
+      font-weight: 300;
       line-height: 1.1;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
     }
 
     .cta-form {
@@ -449,7 +449,7 @@
       outline: none;
       padding: 1.2rem 0;
       color: var(--white);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.9rem;
       font-weight: 300;
     }
@@ -460,7 +460,7 @@
       background: transparent;
       border: none;
       color: var(--accent);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 0.15em;
@@ -771,7 +771,7 @@ function frame() {
         cx.beginPath();
         cx.moveTo(nodes[i].x,nodes[i].y);
         cx.lineTo(nodes[j].x,nodes[j].y);
-        cx.strokeStyle = `rgba(200,255,0,${(1-d/MAX)*.5})`;
+        cx.strokeStyle = `rgba(201,169,110,${(1-d/MAX)*.5})`;
         cx.lineWidth = .5;
         cx.stroke();
       }
@@ -780,7 +780,7 @@ function frame() {
   nodes.forEach(n => {
     cx.beginPath();
     cx.arc(n.x,n.y,n.r,0,Math.PI*2);
-    cx.fillStyle = 'rgba(200,255,0,0.8)';
+    cx.fillStyle = 'rgba(201,169,110,0.7)';
     cx.fill();
   });
   requestAnimationFrame(frame);
@@ -814,7 +814,7 @@ function handleSubmit() {
   const btn = document.querySelector('.form-btn');
   if (!inp.value.includes('@')) return;
   btn.textContent = 'Noted —';
-  btn.style.color = '#c8ff00';
+  btn.style.color = '#C9A96E';
   inp.value = '';
   setTimeout(() => { btn.textContent = 'Submit →'; btn.style.color = ''; }, 4000);
 }
